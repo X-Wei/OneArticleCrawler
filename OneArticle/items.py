@@ -10,7 +10,7 @@ import scrapy
 
 class OnearticleItem(scrapy.Item):
     # define the fields for your item here like:
-    vol = scrapy.Field()
+    article = scrapy.Field()
     title = scrapy.Field()
     author = scrapy.Field()
     content = scrapy.Field()
