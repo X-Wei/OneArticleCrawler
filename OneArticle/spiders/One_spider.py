@@ -7,14 +7,15 @@ class OneSpider(scrapy.spider.Spider):
     name = "one_spider"
     allowed_domains = ["wufazhuce.com"]
     start_urls = [
-        "http://wufazhuce.com/one/vol.%d#articulo"%i for i in range(1,924)
+        "http://wufazhuce.com/article/%d"%i for i in range(1,924)
     ]
 
     def parse(self, response):
         nb = re.findall('\d+',response.url)[0]
-        title_path = '//*[@id="tab-articulo"]/div/h2/text()' 
-        author_path = '//*[@id="tab-articulo"]/div/p/text()' 
-        #~ content_path = '//div[@class="articulo-contenido"]/p/text()' 
+#        title_path = '//*[@id="tab-articulo"]/div/h2/text()' 
+        title_path = '//h2[@class="articulo-titulo"]/descendant-or-self::text()' 
+        author_path = '//*[@class="articulo-autor"]/descendant-or-self::text()' 
+#        #~ content_path = '//div[@class="articulo-contenido"]/p/text()' 
         content_path = '//div[@class="articulo-contenido"]/descendant-or-self::text()' 
         title = response.xpath(title_path).extract()[0].strip()
         author = response.xpath(author_path).extract()[0].strip()
@@ -26,7 +27,7 @@ class OneSpider(scrapy.spider.Spider):
         else:
             print nb,title,author
             item = OnearticleItem()
-            item['vol'] = nb
+            item['article'] = nb
             item['title'] = title
             item['author'] = author
             item['content'] = content
